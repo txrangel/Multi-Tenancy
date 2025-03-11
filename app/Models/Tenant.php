@@ -31,7 +31,7 @@ class Tenant extends BaseTenant implements TenantWithDatabase
         'remember_token'
     ];
 
-    // public function setPasswordAttribute($value): string{
-    //     return $this->attributes['password'] = Hash::make(value: $value);
-    // }
+    public function setPasswordAttribute($value): string{
+        return $this->attributes['password'] = Hash::make(value: $value);
+    }
 }

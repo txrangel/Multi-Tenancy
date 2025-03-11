@@ -45,4 +45,18 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    // Relação muitos-para-muitos com Profile
+    public function profiles()
+    {
+        return $this->belongsToMany(Profile::class, 'user_profile');
+    }
+    public function hasPermission(string $permission): bool
+    {
+        foreach ($this->profiles as $profile) {
+            if ($profile->permissions->contains('name', $permission)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
