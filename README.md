@@ -75,5 +75,5 @@ docker run --rm \
 
 #### Criar base minima
 ```bash
-./vendor/bin/sail artisan db:seed
+./vendor/bin/sail artisan db:seed --class=FullDatabaseSeeder
 ```

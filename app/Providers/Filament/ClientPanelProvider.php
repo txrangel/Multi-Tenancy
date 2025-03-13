@@ -54,6 +54,11 @@ class ClientPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            ->middleware(middleware: [
+                'universal',
+                InitializeTenancyByDomain::class,
+                PreventAccessFromCentralDomains::class,
+            ],isPersistent: true)
             ->authMiddleware([
                 Authenticate::class,
             ]);
