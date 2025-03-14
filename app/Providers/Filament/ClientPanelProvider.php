@@ -2,7 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use App\Models\User;
+use App\Models\Tenant; // Importe o modelo de tenant
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -20,18 +20,21 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
+use Filament\Facades\Filament;
 
 class ClientPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        $tenant = Filament::getTenant();
+        // dd($tenant);
         return $panel
             ->id('client')
             ->path('client')
             ->login()
-            ->colors([
-                'primary' => Color::Amber,
-            ])
+            ->tenant(Tenant::class) // Passa o modelo de tenant
+            // ->brandLogo(fn () => tenant() ? tenant()->photo_path : '') // Logo dinâmico
+            // ->colors()
             ->discoverResources(in: app_path('Filament/Client/Resources'), for: 'App\\Filament\\Client\\Resources')
             ->discoverPages(in: app_path('Filament/Client/Pages'), for: 'App\\Filament\\Client\\Pages')
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
@@ -39,11 +42,10 @@ class ClientPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Client/Widgets'), for: 'App\\Filament\\Client\\Widgets')
-            ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
-            ])
             ->middleware([
+                InitializeTenancyByDomain::class, // Inicializa o tenant ANTES da autenticação
+                'web', // Middleware web inclui session, CSRF, etc.
+                PreventAccessFromCentralDomains::class, // Bloqueia acesso central
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
@@ -54,13 +56,8 @@ class ClientPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-            ->middleware(middleware: [
-                'universal',
-                InitializeTenancyByDomain::class,
-                PreventAccessFromCentralDomains::class,
-            ],isPersistent: true)
             ->authMiddleware([
-                Authenticate::class,
+                Authenticate::class, // Middleware de autenticação
             ]);
     }
 }

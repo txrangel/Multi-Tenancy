@@ -39,7 +39,28 @@ class TenantResource extends Resource
                         ->password()
                         ->required()
                         ->maxLength(255),
-                    Forms\Components\TextInput::make('domain'),
+                    Forms\Components\TextInput::make('domain')
+                        ->required()
+                        ->maxLength(255),
+                    Forms\Components\FileUpload::make('photo_path')
+                        ->disk('public') // Usar o disco 'public'
+                        ->directory('tenants/photos') // Salvar na pasta 'pdfs' dentro do disco 'public'
+                        ->preserveFilenames()
+                        ->image()
+                        ->deletable(true)
+                        ->imageResizeMode('cover')
+                        ->imageCropAspectRatio('4:3')
+                        ->imageEditor()
+                        ->circleCropper()
+                        ->downloadable()
+                        ->previewable(true)
+                        ->required(),
+                    Forms\Components\ColorPicker::make('primary_color')
+                        ->regex('/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/')
+                        ->required(),
+                    Forms\Components\ColorPicker::make('secundary_color')
+                        ->regex('/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/')
+                        ->required(),
                 ])
             ]);
     }
@@ -60,6 +81,7 @@ class TenantResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
