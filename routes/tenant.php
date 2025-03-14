@@ -27,4 +27,20 @@ Route::middleware([
         dd(tenant(),\App\Models\User::all());
         // return 'This is your multi-tenant application. The id of the current tenant is ' . tenant('id');
     });
+    Route::get('/test-login', function () {
+        return view('test-login');
+    });
+
+    Route::post('/test-login', function () {
+        $credentials = [
+            'email' => 'joao.silva@teste.com',
+            'password' => '12345678',
+        ];
+
+        if (Auth::attempt($credentials)) {
+            return 'Login successful!';
+        }
+
+        return 'Login failed!';
+    })->name('teste');
 });
