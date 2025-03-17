@@ -32,6 +32,7 @@ class Tenant extends BaseTenant implements TenantWithDatabase
     }
 
     protected $hidden = [
+        'email',
         'password',
         'remember_token'
     ];

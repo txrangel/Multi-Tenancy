@@ -2,45 +2,33 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\SessionDomainMiddleware;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
-/*
-|--------------------------------------------------------------------------
-| Tenant Routes
-|--------------------------------------------------------------------------
-|
-| Here you can register the tenant routes for your application.
-| These routes are loaded by the TenantRouteServiceProvider.
-|
-| Feel free to customize them however you want. Good luck!
-|
-*/
-
 Route::middleware([
     'web',
-    InitializeTenancyByDomain::class,
-    PreventAccessFromCentralDomains::class,
+    InitializeTenancyByDomain::class, // Inicializa o tenant
+    PreventAccessFromCentralDomains::class, // Bloqueia acesso central
+    ShareErrorsFromSession::class, // Compartilha erros de sessão com as views
 ])->group(function () {
     Route::get('/', function () {
-        dd(tenant(),\App\Models\User::all());
-        // return 'This is your multi-tenant application. The id of the current tenant is ' . tenant('id');
-    });
-    Route::get('/test-login', function () {
-        return view('test-login');
+        // dd(tenant(),App\Models\User::all());
+        return view('welcome');
     });
 
-    Route::post('/test-login', function () {
-        $credentials = [
-            'email' => 'joao.silva@teste.com',
-            'password' => '12345678',
-        ];
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->middleware(['auth', 'verified'])->name('dashboard');
 
-        if (Auth::attempt($credentials)) {
-            return 'Login successful!';
-        }
+    Route::middleware('auth')->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
 
-        return 'Login failed!';
-    })->name('teste');
+    // Inclua as rotas de autenticação do Breeze
+    require __DIR__.'/auth.php';
 });
