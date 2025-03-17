@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -26,9 +24,6 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        // dd('entrou');
-        // dd($request->all(),$request->headers->all(),$request->method(),$request->fullUrl(),$request->session()->all());
-        // dd(User::where('email', 'joao.silva@teste.com')->first(),Hash::check('12345678', User::where('email', 'joao.silva@teste.com')->value('password')));
         $request->authenticate();
 
         $request->session()->regenerate();

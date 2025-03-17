@@ -2,59 +2,79 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\ProfileCreateUpdate;
+use App\Services\PermissionService;
+use App\Services\ProfileService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    protected $service;
+
+    public function __construct(ProfileService $service)
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $this->service = $service;
     }
-
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function index(): View
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $profiles = $this->service->getPaginate();
+        return view(view: 'profiles.index', data: compact(var_name: 'profiles'));
+    }
+    public function create(): View
+    {
+        return view(view: 'profiles.create');
+    }
+    public function edit(int $id): View
+    {
+        $profile  = $this->service->findById(id: $id);
+        return view(view: 'profiles.edit', data: compact(var_name: 'profile'));
+    }
+    public function store(ProfileCreateUpdate $request): RedirectResponse
+    {
+        try {
+            $this->service->create(data: $request->all());
+            return Redirect::route(route: 'profiles.index')->with(key: 'success', value: 'Perfil criado com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with(key: 'error', value: $e->getMessage())->withInput();
         }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+    public function update(ProfileCreateUpdate $request,int $id): RedirectResponse
+    {
+        try {
+            $this->service->update(id: $id, data: $request->all());
+            return Redirect::route(route: 'profiles.index')->with(key: 'success', value: 'Perfil atualizado com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with(key: 'error', value: $e->getMessage())->withInput();
+        }
+    }
+    public function destroy(int $id): RedirectResponse
+    {
+        try {
+            $this->service->delete(id: $id);
+            return Redirect::route(route: 'profiles.index')->with(key: 'success', value: 'Perfil excluído com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with(key: 'error', value: $e->getMessage());
+        }
+    }
+    public function editPermissions(int $id,PermissionService $service): View
+    {
+        $profile         = $this->service->findById(id: $id);
+        $permissions    = $service->getAllPermissions();
+        return view(view: 'profiles.permissions.edit', data: compact(var_name: ['profile', 'permissions']));
     }
 
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
+    public function updatePermissions(Request $request, int $id): RedirectResponse
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
-
-        $user = $request->user();
-
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        try {
+            $permissionIds = $request->input('permissions', []);
+            $profile         = $this->service->findById(id: $id);
+            $this->service->syncPermissions($profile, $permissionIds);
+            return redirect()->route('profiles.index')->with('success', 'Permissões do profile alteradas com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with(key: 'error', value: $e->getMessage());
+        }
     }
 }

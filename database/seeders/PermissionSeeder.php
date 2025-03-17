@@ -17,6 +17,7 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'profile.view']);
         Permission::create(['name' => 'profile.create']);
         Permission::create(['name' => 'profile.update']);
+        Permission::create(['name' => 'profile.permissions.update']);
         Permission::create(['name' => 'profile.delete']);
         Permission::create(['name' => 'profile.restore']);
         Permission::create(['name' => 'profile.delete.force']);
@@ -31,6 +32,8 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'user.view']);
         Permission::create(['name' => 'user.create']);
         Permission::create(['name' => 'user.update']);
+        Permission::create(['name' => 'user.update.password']);
+        Permission::create(['name' => 'user.profiles.update']);
         Permission::create(['name' => 'user.delete']);
         Permission::create(['name' => 'user.restore']);
         Permission::create(['name' => 'user.delete.force']);

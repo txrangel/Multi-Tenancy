@@ -10,27 +10,22 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
+        <script src="https://kit.fontawesome.com/83b4e7d16f.js" crossorigin="anonymous"></script>
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
-
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
+    <body class="min-h-screen bg-zinc-300 dark:bg-zinc-700 p-4">
+        @if (session('sucess'))
+            @include('components.alerts.sucess')
+        @endif
+        @if (session('error'))
+            @include('components.alerts.error')
+        @endif
+        <!-- Sidebar -->
+        @include('layouts.side-navigation')
+        <!-- Conteúdo Principal -->
+        <main class="transition-all duration-300 ease-in-out pl-12 md:pl-48">
+            @yield('content')
+        </main>
     </body>
 </html>
