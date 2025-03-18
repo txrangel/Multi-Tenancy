@@ -52,4 +52,22 @@ class Tenant extends BaseTenant implements TenantWithDatabase
             }
         });
     }
+
+    // Sobrescreva o método delete
+    public function delete()
+    {
+        // Executa o soft delete (não exclui o banco de dados)
+        return parent::delete();
+    }
+
+    // Sobrescreva o método forceDelete
+    public function forceDelete()
+    {
+        // Executa o force delete e exclui o banco de dados
+        $this->domains()->forceDelete();
+        $this->forceDelete();
+        $this->database()->manager()->deleteDatabase($this);
+
+        return parent::forceDelete();
+    }
 }

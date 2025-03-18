@@ -43,7 +43,7 @@ Route::middleware([
             ->name('update')
             ->middleware(CheckPermission::class . ':profile.update');
         Route::get('/{id}/permissions', 'editPermissions')
-            ->name('permissions.update')
+            ->name('permissions.edit')
             ->middleware(CheckPermission::class . ':profile.permissions.update');
         Route::put('/{id}/permissions', 'updatePermissions')
             ->name('permissions.update')
@@ -96,7 +96,7 @@ Route::middleware([
             ->name('update.password')
             ->middleware(CheckPermission::class . ':user.update.password');
         Route::get('/{id}/profiles', 'editProfiles')
-            ->name('profiles.update')
+            ->name('profiles.edit')
             ->middleware(CheckPermission::class . ':user.profiles.update');
         Route::put('/{id}/profiles', 'updateProfiles')
             ->name('profiles.update')

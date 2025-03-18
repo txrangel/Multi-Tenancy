@@ -63,4 +63,9 @@ class ProfilePolicy
     {
         return $user->hasPermission('profile.delete.force');
     }
+
+    public function managePermissions(User $user, Profile $profile): bool
+    {
+        return $user->hasPermission('profile.permissions.update');
+    }
 }

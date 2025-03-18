@@ -40,6 +40,14 @@ class UserPolicy
     }
 
     /**
+     * Verifica se o usuário pode editar a senha de um usuário.
+     */
+    public function updatePassword(User $user, User $model): bool
+    {
+        return $user->hasPermission('user.update.password');
+    }
+
+    /**
      * Determine whether the user can delete the model.
      */
     public function delete(User $user, User $model): bool
@@ -61,5 +69,13 @@ class UserPolicy
     public function forceDelete(User $user, User $model): bool
     {
         return $user->hasPermission('user.delete.force');
+    }
+
+    /**
+     * Verifica se o usuário pode gerenciar os perfis de um usuário.
+     */
+    public function manageProfiles(User $user, User $model): bool
+    {
+        return $user->hasPermission('user.profiles.update');
     }
 }
