@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\SessionDomainMiddleware;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -53,10 +54,10 @@ class AppPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->middleware(middleware: [
+                SessionDomainMiddleware::class,
                 'web',
                 InitializeTenancyByDomain::class, // Inicializa o tenant
                 PreventAccessFromCentralDomains::class, // Bloqueia acesso central
-                ShareErrorsFromSession::class, // Compartilha erros de sessão com as views
             ],isPersistent:true)
             ->authMiddleware([
                 Authenticate::class,

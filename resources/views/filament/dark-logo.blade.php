@@ -7,5 +7,7 @@
             <img src="{{ url('img/tenants/noimage.png') }}" alt="{{ tenant()->name }}"
                 class="">
         @endif
+    @else
+        <h1>Logo Escuro</h1>
     @endif
 </div>
