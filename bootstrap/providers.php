@@ -5,5 +5,5 @@ return [
     App\Providers\AuthServiceProvider::class,
     App\Providers\TenancyServiceProvider::class,
     App\Providers\Filament\AdminPanelProvider::class,
-    //App\Providers\RouteServiceProvider::class,
+    App\Providers\Filament\AppPanelProvider::class,
 ];

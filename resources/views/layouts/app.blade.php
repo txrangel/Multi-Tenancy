@@ -15,14 +15,6 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="min-h-screen bg-zinc-300 dark:bg-zinc-700 p-4">
-        @if (session('sucess'))
-            @include('components.alerts.sucess')
-        @endif
-        @if (session('error'))
-            @include('components.alerts.error')
-        @endif
-        <!-- Sidebar -->
-        @include('layouts.side-navigation')
         <!-- Conteúdo Principal -->
         <main class="transition-all duration-300 ease-in-out pl-12 md:pl-48">
             @yield('content')
