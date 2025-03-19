@@ -20,8 +20,12 @@ class CreateTenantsTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('photo_path');
+            $table->string('primary_color');
+            $table->string('secundary_color');
             $table->timestamps();
             $table->json('data')->nullable();
+            // $table->softDeletes();
         });
     }
 

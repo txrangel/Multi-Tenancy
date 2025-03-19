@@ -1,7 +1,20 @@
 ## Base MultiTenancy
 
-### Funcionalidades
+### Erros
+1. Acessando Painel do Cliente na Aplicação Central:
 
+    - O painel de clientes (ClientPanel) está acessível em domínios centrais, quando deveria estar disponível apenas em domínios de tenants.
+
+2. Acessando Painel do Admin na Aplicação do Tenant:
+
+    - O painel de admin (AdminPanel) está acessível em domínios de tenants, quando deveria estar disponível apenas em domínios centrais.
+
+3. Usuário do Cliente não está logando:
+
+    - Os usuários do painel de clientes não conseguem fazer login, possivelmente devido a problemas de autenticação ou configuração do banco de dados do tenant.
+
+### Funcionalidades
+- CRUD de Tenants e Usuários
 
 ### Requisitos
 - Docker
@@ -62,5 +75,5 @@ docker run --rm \
 
 #### Criar base minima
 ```bash
-./vendor/bin/sail artisan db:seed
+./vendor/bin/sail artisan db:seed --class=FullDatabaseSeeder
 ```
