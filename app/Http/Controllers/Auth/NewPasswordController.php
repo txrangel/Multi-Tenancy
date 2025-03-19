@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Services\PasswordService;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
@@ -28,7 +27,6 @@ class NewPasswordController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public PasswordService $passwordService;
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -42,10 +40,10 @@ class NewPasswordController extends Controller
         // database. Otherwise we will parse the error and return the response.
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (User $user) use ($request) {
+            function ($user) use ($request) {
                 $user->forceFill([
-                    'password' => $this->passwordService->make(password: $request->password),
-                    'remember_token' => $this->passwordService->random(length: 60),
+                    'password' => Hash::make(Str::of($request->password)->trim()->value),
+                    'remember_token' => Str::random(60),
                 ])->save();
 
                 event(new PasswordReset($user));
@@ -58,6 +56,6 @@ class NewPasswordController extends Controller
         return $status == Password::PASSWORD_RESET
                     ? redirect()->route('login')->with('status', __($status))
                     : back()->withInput($request->only('email'))
-                        ->withErrors(['email' => __($status)]);
+                            ->withErrors(['email' => __($status)]);
     }
 }

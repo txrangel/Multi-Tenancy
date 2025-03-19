@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Tenant extends BaseTenant implements TenantWithDatabase
 {
-    use HasDatabase, HasDomains,SoftDeletes;
+    use HasDatabase, HasDomains/*,SoftDeletes*/;
 
     public function domains(): HasMany{
         return $this->hasMany(related: Domain::class);
@@ -51,23 +51,5 @@ class Tenant extends BaseTenant implements TenantWithDatabase
                 Storage::disk('public')->delete($tenant->photo_path);
             }
         });
-    }
-
-    // Sobrescreva o método delete
-    public function delete()
-    {
-        // Executa o soft delete (não exclui o banco de dados)
-        return parent::delete();
-    }
-
-    // Sobrescreva o método forceDelete
-    public function forceDelete()
-    {
-        // Executa o force delete e exclui o banco de dados
-        $this->domains()->forceDelete();
-        $this->forceDelete();
-        $this->database()->manager()->deleteDatabase($this);
-
-        return parent::forceDelete();
     }
 }

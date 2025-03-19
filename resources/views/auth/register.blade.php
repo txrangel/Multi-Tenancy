@@ -49,4 +49,5 @@
             </x-primary-button>
         </div>
     </form>
+    <a href="/login" class="text-blue-500 underline underline-offset-2">Login</a>
 </x-guest-layout>

@@ -55,7 +55,7 @@ class UserResource extends Resource
                     ->searchable(),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(), 
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

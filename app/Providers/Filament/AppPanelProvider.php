@@ -28,9 +28,7 @@ class AppPanelProvider extends PanelProvider
         return $panel
             ->id('app')
             ->path('app')
-            ->login(function(){
-                return view('auth.login');
-            })
+            ->login(fn () => view('auth.login'))
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\\Filament\\App\\Pages')
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
@@ -60,12 +58,18 @@ class AppPanelProvider extends PanelProvider
                 PreventAccessFromCentralDomains::class, // Bloqueia acesso central
             ],isPersistent:true)
             ->authMiddleware([
-                Authenticate::class,
+                'auth'
             ])
-            ->brandLogo(fn () => url("storage/".tenant()->photo_path))
+            ->brandLogo(fn () => view('filament.logo'))
+            ->darkModeBrandLogo(fn () => view('filament.dark-logo'))
+            ->brandLogoHeight('62px')
+            ->favicon(fn () => url("storage/".tenant()->photo_path))
             // ->colors(function (){
             //     dd(tenant());
-            //     return [];
+            //     $array = [
+            //         'primary' => Color::hex(tenant()->primary_color),
+            //     ];
+            //     return $array;
             // })
             ;
     }

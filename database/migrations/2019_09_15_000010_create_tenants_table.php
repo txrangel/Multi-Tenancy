@@ -25,7 +25,7 @@ class CreateTenantsTable extends Migration
             $table->string('secundary_color');
             $table->timestamps();
             $table->json('data')->nullable();
-            $table->softDeletes();
+            // $table->softDeletes();
         });
     }
 

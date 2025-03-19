@@ -78,13 +78,13 @@ class TenantResource extends Resource
                     ->searchable(),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(), 
+                // Tables\Filters\TrashedFilter::make(), 
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
+                // Tables\Actions\RestoreAction::make(),
+                // Tables\Actions\ForceDeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -108,11 +108,11 @@ class TenantResource extends Resource
             'edit' => Pages\EditTenant::route('/{record}/edit'),
         ];
     }
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
-    }
+    // public static function getEloquentQuery(): Builder
+    // {
+    //     return parent::getEloquentQuery()
+    //         ->withoutGlobalScopes([
+    //             SoftDeletingScope::class,
+    //         ]);
+    // }
 }

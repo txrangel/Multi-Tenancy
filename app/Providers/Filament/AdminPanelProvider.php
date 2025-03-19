@@ -32,10 +32,9 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Gray,
             ])
             // ->brandName('')
-            ->brandLogo(fn (): View => view('filament.logo'))
-            ->darkModeBrandLogo(fn (): View => view('filament.dark-logo'))
-            ->favicon('')
-
+            ->brandLogo(fn () => view('filament.logo'))
+            ->darkModeBrandLogo(fn () => view('filament.dark-logo'))
+            ->brandLogoHeight('62px')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
