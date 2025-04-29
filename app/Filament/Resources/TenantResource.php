@@ -34,7 +34,7 @@ class TenantResource extends Resource
                     Forms\Components\TextInput::make('email')
                         ->required()
                         ->email()
-                        ->unique(table: Tenant::class, column: 'email',ignorable: null,ignoreRecord: true)
+                        // ->unique(table: Tenant::class, column: 'email', ignorable: null, ignoreRecord: true)
                         ->maxLength(255),
                     Forms\Components\TextInput::make('password')
                         ->password()
@@ -56,12 +56,45 @@ class TenantResource extends Resource
                         ->downloadable()
                         ->previewable(true)
                         ->required(),
-                    Forms\Components\ColorPicker::make('primary_color')
-                        ->regex('/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/')
-                        ->required(),
-                    Forms\Components\ColorPicker::make('secundary_color')
-                        ->regex('/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/')
-                        ->required(),
+
+                    // Campo de cores
+                    Forms\Components\Grid::make(6)->schema([ // Organiza as cores em 3 colunas
+                        Forms\Components\ColorPicker::make('primary_color')
+                            ->label('Primary Color')
+                            ->default('#3490dc')
+                            ->required()
+                            ->columnSpan(1),
+                            
+                        Forms\Components\ColorPicker::make('danger_color')
+                            ->label('Danger Color')
+                            ->default('#ff0022')
+                            ->required()
+                            ->columnSpan(1),
+
+                        Forms\Components\ColorPicker::make('info_color')
+                            ->label('Info Color')
+                            ->default('#00bcd4')
+                            ->required()
+                            ->columnSpan(1),
+
+                        Forms\Components\ColorPicker::make('gray_color')
+                            ->label('Gray Color')
+                            ->default('#b0b0b0')
+                            ->required()
+                            ->columnSpan(1),
+
+                        Forms\Components\ColorPicker::make('success_color')
+                            ->label('Success Color')
+                            ->default('#28a745')
+                            ->required()
+                            ->columnSpan(1),
+
+                        Forms\Components\ColorPicker::make('warning_color')
+                            ->label('Warning Color')
+                            ->default('#ffcc00')
+                            ->required()
+                            ->columnSpan(1),
+                    ]),
                 ])
             ]);
     }
@@ -74,6 +107,9 @@ class TenantResource extends Resource
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('domains.domain')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\ColorColumn::make('primary_color')
                     ->sortable()
                     ->searchable(),
             ])
