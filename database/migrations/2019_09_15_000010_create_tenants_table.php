@@ -18,11 +18,15 @@ class CreateTenantsTable extends Migration
         Schema::create('tenants', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('password');
             $table->string('photo_path');
+            $table->string('danger_color');
+            $table->string('gray_color');
+            $table->string('info_color');
             $table->string('primary_color');
-            $table->string('secundary_color');
+            $table->string('success_color');
+            $table->string('warning_color');
             $table->timestamps();
             $table->json('data')->nullable();
             // $table->softDeletes();

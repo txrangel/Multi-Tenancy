@@ -25,10 +25,10 @@ class AppPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        return $panel
+        $panel = $panel
             ->id('app')
             ->path('app')
-            ->login(fn () => view('auth.login'))
+            ->login(fn() => view('auth.login'))
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\\Filament\\App\\Pages')
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
@@ -36,10 +36,6 @@ class AppPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/App/Widgets'), for: 'App\\Filament\\App\\Widgets')
-            ->widgets([
-                // Widgets\AccountWidget::class,
-                // Widgets\FilamentInfoWidget::class,
-            ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -56,21 +52,22 @@ class AppPanelProvider extends PanelProvider
                 'web',
                 InitializeTenancyByDomain::class, // Inicializa o tenant
                 PreventAccessFromCentralDomains::class, // Bloqueia acesso central
-            ],isPersistent:true)
+            ])
             ->authMiddleware([
                 'auth'
             ])
-            ->brandLogo(fn () => view('filament.logo'))
-            ->darkModeBrandLogo(fn () => view('filament.dark-logo'))
+            ->brandLogo(fn() => view('filament.logo'))
+            ->darkModeBrandLogo(fn() => view('filament.dark-logo'))
             ->brandLogoHeight('62px')
-            ->favicon(fn () => url("storage/".tenant()->photo_path))
-            // ->colors(function (){
-            //     dd(tenant());
-            //     $array = [
-            //         'primary' => Color::hex(tenant()->primary_color),
-            //     ];
-            //     return $array;
-            // })
-            ;
+            ->favicon(fn()=>url("storage/" . tenant()->photo_path))
+            ->colors([
+                'primary'   => Color::hex(config('theme.colors.primary')),
+                'info'      => Color::hex(config('theme.colors.info')),
+                'danger'    => Color::hex(config('theme.colors.danger')),
+                'success'   => Color::hex(config('theme.colors.success')),
+                'warning'   => Color::hex(config('theme.colors.warning')),
+                'gray'      => Color::hex(config('theme.colors.gray')),
+            ]);
+        return $panel;
     }
 }
